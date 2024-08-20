@@ -1,18 +1,20 @@
+import 'package:carcareproject/components/config.dart';
+import 'package:carcareproject/screens/records.dart';
 import 'package:flutter/material.dart';
-import 'com_button.dart';
+import 'package:carcareproject/components/com_button.dart';
 
 class CarCard extends StatelessWidget {
   final String carNumber;
-  final String carBrand;
   final String carModel;
   final String carYear;
+  final VoidCallback onRemove;
 
   const CarCard({
     super.key,
     required this.carNumber,
-    required this.carBrand,
     required this.carModel,
     required this.carYear,
+    required this.onRemove,
   });
 
   @override
@@ -43,12 +45,7 @@ class CarCard extends StatelessWidget {
                       ),
                       SizedBox(height: 4),
                       Text(
-                        "Car Brand: $carBrand",
-                        style: TextStyle(fontSize: 14),
-                      ),
-                      SizedBox(height: 4),
-                      Text(
-                        "Car Model: $carModel",
+                        "Car Brand & Model: $carModel",
                         style: TextStyle(fontSize: 14),
                       ),
                       SizedBox(height: 4),
@@ -56,24 +53,40 @@ class CarCard extends StatelessWidget {
                         "Car Year: $carYear",
                         style: TextStyle(fontSize: 14),
                       ),
+                      Config.spaceSmall,
+                      Row(
+                        children: [
+                          ButtonBar(
+                            children: <Widget>[
+                              ComButton(
+                                width: 120,
+                                height: 30,
+                                title: "Records",
+                                disable: false,
+                                color: '#512DA8',
+                                onPressed: () {
+                                  Navigator.push(context, MaterialPageRoute(builder: (context) => RecordsPage()),);
+                                },
+                              ),
+                              ComButton(
+                                width: 120,
+                                height: 30,
+                                title: "Remove",
+                                disable: false,
+                                color: '#FF0000',
+                                onPressed: () {
+                                  print('Removing vehicle with number: $carNumber'); // Debugging
+                                  onRemove();
+                                },
+                              ),
+                            ],
+                          ),
+                        ],
+                      )
                     ],
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 90.0),
-                  child: ButtonBar(
-                    children: <Widget>[
-                      ComButton(
-                        width: 120,
-                        height: 30,
-                        title: "Remove",
-                        disable: false,
-                        color: '#512DA8',
-                        onPressed: () => {},
-                      ),
-                    ],
-                  ),
-                ),
+
               ],
             ),
           ],

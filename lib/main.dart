@@ -3,6 +3,7 @@ import 'package:carcareproject/screens/vehicles.dart';
 import 'package:flutter/material.dart';
 import 'components/bottom_navigation.dart';
 import 'components/config.dart';
+import 'components/feedbackform.dart';
 
 void main(){
   runApp(const MyApp());
@@ -44,7 +45,7 @@ class MyApp extends StatelessWidget {
         '/' : (context) => SplashScreen(),
         //for main layout after login
         '/main': (context) => CustomBottomNavBar(),
-        //fot car page
+        //for car page
         '/car': (context) => Vehicles(),
       },
     );

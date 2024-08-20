@@ -1,9 +1,12 @@
+import 'package:carcareproject/components/appointmenthistory.dart';
+import 'package:carcareproject/components/checkslots.dart';
 import 'package:flutter/material.dart';
 import '../Components/com_button.dart';
 import '../Components/config.dart';
-import '../components/booking_form.dart';
-import '../components/ongoing_appointment.dart';
+import '../components/ongoingcard.dart';
 import '../config/auth_services.dart';
+import '../config/global.dart';
+import 'package:http/http.dart' as http;
 
 class Appointment extends StatefulWidget {
   const Appointment({super.key});
@@ -13,18 +16,80 @@ class Appointment extends StatefulWidget {
 }
 
 class _AppointmentState extends State<Appointment> {
+  List<bool> isSelected = [true, false];
+  final List<HistoryCard> history = [];
+  final List<OngoingCard> ongoing = [];
+  bool isListLoading = true;
+  String appointmentID = '';
 
+  @override
+  void initState() {
+    super.initState();
+    _fetchAppointmentData();
+  }
 
- void _navigateToBookingForm() async {
+  void _fetchAppointmentData() async {
     try {
-      List<String> branches = await AuthServices.fetchBranches();
-      List<String> services = await AuthServices.fetchServices();
-      List<String> vehicles = await AuthServices.fetchVehicles();
+      // Fetch appointment history
+      final List<Map<String, String>> historyAppointments = await AuthServices.fetchAppointmentHistory();
+      for (Map<String, String> appointment in historyAppointments) {
+        history.add(HistoryCard(
+          appointmentID: appointment['appointmentID'] ?? 'N/A',
+          serviceType: appointment['serviceType'] ?? 'Unknown Service',
+          branch: appointment['branch'] ?? 'Unknown Branch',
+          status: appointment['status'] ?? 'Unknown Status',
+          date: appointment['date'] ?? 'Unknown Date',
+          time: appointment['time'] ?? 'Unknown Time',
+        ));
+      }
+
+      // Fetch ongoing appointments
+      final List<Map<String, String>> ongoingAppointments = await AuthServices.fetchOngoingAppointments();
+      for (Map<String, String> appointment in ongoingAppointments) {
+        ongoing.add(OngoingCard(
+          appointmentID: appointment['appointmentID'] ?? '',
+          serviceType: appointment['serviceType'] ?? 'Unknown Service',
+          branch: appointment['branch'] ?? 'Unknown Branch',
+          status: appointment['status'] ?? 'Unknown Status',
+          date: appointment['date'] ?? 'Unknown Date',
+          time: appointment['time'] ?? 'Unknown Time',
+          onRemove: () {
+            final id = appointment['appointmentID'];
+            print('Attempting to delete appointment with ID: $id');  // Debugging
+            if (id != null && id.isNotEmpty) {
+              _confirmDelete(id);
+            } else {
+              print('Error: Invalid appointmentID');
+            }
+          },
+        ));
+      }
+
+      setState(() {
+        isListLoading = false;
+      });
+    } catch (e) {
+      print('Error fetching appointment data: $e');
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        backgroundColor: Colors.red,
+        content: Text('Failed to fetch appointments'),
+      ));
+      setState(() {
+        isListLoading = false;
+      });
+    }
+  }
+
+  void _navigateToBookingForm() async {
+    try {
+      List<Map<String, String>> branchData = await AuthServices.fetchBranches();
 
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => BookingForm(branches: branches, services: services, vehicles: vehicles),
+          builder: (context) => CheckSlots(
+            branches: branchData,
+          ),
         ),
       );
     } catch (e) {
@@ -36,206 +101,160 @@ class _AppointmentState extends State<Appointment> {
     }
   }
 
+  Future<void> _confirmDelete(String appointmentID) async {
+    final result = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Confirm Cancelation'),
+        content: Text('Are you sure you want to cancel this appointment?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: Text('Cancel'),
+          ),
+          ElevatedButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            child: Text('Delete Appointment'),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.red,
+            ),
+          ),
+        ],
+      ),
+    );
 
-  List<bool> isSelected = [true, false];
+    if (result == true) {
+      _cancelAppointment(appointmentID);
+    }
+  }
 
-  final List<HistoryApp> history = [
-    HistoryApp(
-      appointment_no: "Ap5001",
-      vehicle_no: "CAA-7894",
-      service: "Car Wash",
-      branch: "Maharagama",
-      status: "Done",
-      dateTime: DateTime(2024, 07, 20, 10, 0),
-    ),
-    HistoryApp(
-      appointment_no: "Ap5002",
-      vehicle_no: "CAB-5678",
-      service: "Oil Change",
-      branch: "Colombo",
-      status: "Done",
-      dateTime: DateTime(2024, 07, 21, 11, 0),
-    ),
-    HistoryApp(
-      appointment_no: "Ap5001",
-      vehicle_no: "CAA-7894",
-      service: "Car Wash",
-      branch: "Maharagama",
-      status: "Done",
-      dateTime: DateTime(2024, 07, 20, 10, 0),
-    ),
-    HistoryApp(
-      appointment_no: "Ap5002",
-      vehicle_no: "CAB-5678",
-      service: "Oil Change",
-      branch: "Colombo",
-      status: "Done",
-      dateTime: DateTime(2024, 07, 21, 11, 0),
-    ),
-  ];
+  Future<void> _cancelAppointment(String appointmentID) async {
+    try {
+      final token = await AuthServices.getToken();
+      final url = Uri.parse('$baseURL/appointments/$appointmentID/cancel');
+      final response = await http.post(
+        url,
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
+        },
+      );
 
-  final List<HistoryApp> ongoing = [
-    HistoryApp(
-      appointment_no: "On5001",
-      vehicle_no: "CAA-7894",
-      service: "Car Wash",
-      branch: "Maharagama",
-      status: "Done",
-      dateTime: DateTime(2024, 07, 20, 10, 0),
-    ),
-    HistoryApp(
-      appointment_no: "On5002",
-      vehicle_no: "CAB-5678",
-      service: "Oil Change",
-      branch: "Colombo",
-      status: "Done",
-      dateTime: DateTime(2024, 07, 21, 11, 0),
-    ),
-    HistoryApp(
-      appointment_no: "On5002",
-      vehicle_no: "CAB-5678",
-      service: "Oil Change",
-      branch: "Colombo",
-      status: "Done",
-      dateTime: DateTime(2024, 07, 21, 11, 0),
-    ),
-    HistoryApp(
-      appointment_no: "On5001",
-      vehicle_no: "CAA-7894",
-      service: "Car Wash",
-      branch: "Maharagama",
-      status: "Done",
-      dateTime: DateTime(2024, 07, 20, 10, 0),
-    ),
-    HistoryApp(
-      appointment_no: "On5002",
-      vehicle_no: "CAB-5678",
-      service: "Oil Change",
-      branch: "Colombo",
-      status: "Done",
-      dateTime: DateTime(2024, 07, 21, 11, 0),
-    ),
-    HistoryApp(
-      appointment_no: "On5002",
-      vehicle_no: "CAB-5678",
-      service: "Oil Change",
-      branch: "Colombo",
-      status: "Done",
-      dateTime: DateTime(2024, 07, 21, 11, 0),
-    ),
-  ];
+      print('Uri: $url');
+
+      if (response.statusCode == 200 || response.statusCode == 204) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Appointment canceled successfully')),
+        );
+        setState(() {
+          ongoing.removeWhere((appointment) =>
+          appointment.appointmentID == appointmentID);
+        });
+      } else {
+        throw Exception('Failed to cancel appointment');
+      }
+    } catch (e) {
+      print('Error canceling appointment: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to cancel appointment')),
+      );
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
     return Container(
-    decoration: Config.gradientBackground,
-        child: Scaffold(
-      backgroundColor: Colors.transparent,
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Container(
-              width: double.infinity,
-              height: 300,
-              decoration:  BoxDecoration(
-                color: Colors.deepPurple.shade300,
-                borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(00),
-                  bottomRight: Radius.circular(160),
+      decoration: Config.gradientBackground,
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              Container(
+                margin: EdgeInsets.only(right: 7, left: 7, top: 30),
+                width: double.infinity,
+                height: 300,
+                decoration: BoxDecoration(
+                  color: Colors.deepPurple.shade300,
+                  borderRadius: BorderRadius.all(Radius.circular(30)),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 30),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text(
+                        "Appointments",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Config.spaceSmall,
+                      ToggleButtons(
+                        isSelected: isSelected,
+                        onPressed: (int index) {
+                          setState(() {
+                            for (int i = 0; i < isSelected.length; i++) {
+                              isSelected[i] = i == index;
+                            }
+                          });
+                        },
+                        color: Colors.white,
+                        selectedColor: Colors.white,
+                        fillColor: Config.secondaryColor,
+                        borderRadius: BorderRadius.circular(8.0),
+                        borderColor: Colors.white,
+                        children: const <Widget>[
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 50.0),
+                            child: Text('Ongoing'),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 50.0),
+                            child: Text('History'),
+                          ),
+                        ],
+                      ),
+                      Config.spaceSmall,
+                      Config.spaceSmall,
+                      ComButton(
+                        width: 300,
+                        title: "Book Your Service Now",
+                        disable: false,
+                        color: '#512DA8',
+                        onPressed: _navigateToBookingForm,
+                        height: 50,
+                      ),
+                    ],
+                  ),
                 ),
               ),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 30),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+              Config.spaceSmall,
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(10),
+                child: isListLoading
+                    ? const Center(child: CircularProgressIndicator())
+                    : Column(
                   children: [
-                    const Text(
-                      "Appointments",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Config.spaceSmall,
-                    ToggleButtons(
-                      isSelected: isSelected,
-                      onPressed: (int index) {
-                        setState(() {
-                          for (int i = 0; i < isSelected.length; i++) {
-                            isSelected[i] = i == index;
-                          }
-                        });
+                    ListView.builder(
+                      physics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: isSelected[0] ? ongoing.length : history.length,
+                      itemBuilder: (context, index) {
+                        return isSelected[0] ? ongoing[index] : history[index];
                       },
-                      color: Colors.white, // Color of the unselected text
-                      selectedColor: Colors.white, // Color of the selected text
-                      fillColor: Config.secondaryColor, // Background color of the selected button
-                      borderRadius: BorderRadius.circular(8.0),
-                      borderColor: Colors.white,
-                      children: const <Widget>[
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 50.0),
-                          child: Text('Ongoing'),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 50.0),
-                          child: Text('History'),
-                        ),
-                      ],
-                    ),
-                    Config.spaceSmall,
-                    Config.spaceSmall,
-                    ComButton(
-                      width: 300,
-                      title: "Book Your Service Now",
-                      disable: false,
-                      color: '#512DA8',
-                      onPressed: _navigateToBookingForm,
-                      height: 50,
                     ),
                   ],
                 ),
               ),
-            ),
-            Config.spaceSmall,
-            Container(
-              width: double.infinity,
-              padding: EdgeInsets.all(10),
-              decoration: BoxDecoration(),
-              child: Column(
-                children: [
-                  ListView.builder(
-                    physics: NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    itemCount: isSelected[0] ? ongoing.length : history.length,
-                    itemBuilder: (context, index) {
-                      final app = isSelected[0] ? ongoing[index] : history[index];
-                      return Card(
-                        margin: EdgeInsets.symmetric(vertical: 10),
-                        child: ListTile(
-                          title: Text("Appointment No: ${app.appointment_no}"),
-                          subtitle: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text("Vehicle No: ${app.vehicle_no}"),
-                              Text("Service: ${app.service}"),
-                              Text("Branch: ${app.branch}"),
-                              Text("Status: ${app.status}"),
-                              Text("Date & Time: ${app.dateTime}"),
-                            ],
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                ],
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
-        ),
     );
   }
 }
-
