@@ -64,14 +64,18 @@ class VehicleManagementController extends Controller
     }
 
     // Remove the specified vehicle from storage
-    public function destroy(Vehicle $vehicle)
+    public function destroy($vehicle_number)
     {
-        if ($vehicle->user != Auth::id()) {
-            return response()->json(['message' => 'Unauthorized'], 403);
+        $vehicle = Vehicle::where('vehicle_number', $vehicle_number)->first();
+        \Log::info('Attempting to delete vehicle with number: ' . $vehicle_number); 
+    
+        if (!$vehicle) {
+            return response()->json(['message' => 'Vehicle not found'], 404);
         }
-
+    
+        // Directly delete the vehicle without checking user ID
         $vehicle->delete();
-
+    
         return response()->json(['message' => 'Vehicle deleted successfully.']);
     }
 }

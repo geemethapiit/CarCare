@@ -12,12 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('vehicles', function (Blueprint $table) {
-            $table->id(); // Optional: Adds an auto-incrementing ID column
-            $table->string('vehicle_number')->unique();
+            $table->string('vehicle_number')->primary(); // Set `vehicle_number` as the primary key
             $table->string('model');
             $table->year('year');
             $table->string('user');
-            $table->timestamps(); // Optional: Adds created_at and updated_at columns
+            $table->timestamps();
         });
     }
 
