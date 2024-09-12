@@ -24,7 +24,9 @@ class UserController extends Controller
                 [
                     'name' => 'required',
                     'email' => 'required|email|unique:users,email',
-                    'password' => 'required'
+                    'password' => 'required',
+                    'phoneNo' => 'required',
+                    'address' => 'required',
                 ]);
 
             if($validateUser->fails()){
@@ -38,7 +40,9 @@ class UserController extends Controller
             $user = User::create([
                 'name' => $request->name,
                 'email' => $request->email,
-                'password' => Hash::make($request->password)
+                'password' => Hash::make($request->password),
+                'phoneNo' => $request->phoneNo,
+                'address' => $request->address
             ]);
 
             return response()->json([
