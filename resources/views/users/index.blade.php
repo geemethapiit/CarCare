@@ -45,18 +45,8 @@
                                     <p class="font-weight-light small-text mb-0 text-muted"> Just now </p>
                                 </div>
                             </a>
-                            <a class="dropdown-item preview-item">
-                                <div class="preview-thumbnail">
-                                    <div class="preview-icon bg-warning">
-                                        <i class="ti-settings mx-0"></i>
-                                    </div>
-                                </div>
-                                <div class="preview-item-content">
-                                    <h6 class="preview-subject font-weight-normal">Settings</h6>
-                                    <p class="font-weight-light small-text mb-0 text-muted"> Private message </p>
-                                </div>
-                            </a>
-                            <a class="dropdown-item preview-item">
+
+                            <a class="dropdown-item preview-item" href="{{ route('admin.register') }}">
                                 <div class="preview-thumbnail">
                                     <div class="preview-icon bg-info">
                                         <i class="fas fa-user mx-0"></i>
@@ -64,14 +54,13 @@
                                 </div>
                                 <div class="preview-item-content">
                                     <h6 class="preview-subject font-weight-normal">New user registration</h6>
-                                    <p class="font-weight-light small-text mb-0 text-muted"> 2 days ago </p>
                                 </div>
                             </a>
                         </div>
                     </li>
                     <li class="nav-item nav-profile dropdown">
                         <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" id="profileDropdown">
-                            <img src="images/face28.jpg" alt="profile" />
+                            <img src="/images/face28.jpg" alt="profile" />
                         </a>
                         <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
                             <form id="logout-form" action="{{ route('logout') }}" method="POST">
@@ -151,7 +140,21 @@
                         </div>
                     </li>
 
-                   
+                    <li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="collapse" href="#form-elements2" aria-expanded="false" aria-controls="form-elements">
+                            <i class="fas fa-th-large menu-icon"></i>
+                            <span class="menu-title">Sub-Services</span>
+
+
+                        </a>
+                        <div class="collapse" id="form-elements2">
+                            <ul class="nav flex-column sub-menu">
+                                <li class="nav-item"><a class="nav-link" href="{{ route('branches.index') }}">View Branches</a></li>
+                                <li class="nav-item"><a class="nav-link" href="{{ route('branches.create') }}">New Branches</a></li>
+
+                            </ul>
+                        </div>
+                    </li>
 
                     <li class="nav-item">
                         <a class="nav-link" data-bs-toggle="collapse" href="#form" aria-expanded="false" aria-controls="form-elements">
@@ -168,108 +171,70 @@
                         </div>
                     </li>
 
-                    <li class="nav-item">
-                        <a class="nav-link" data-bs-toggle="collapse" href="#form1" aria-expanded="false" aria-controls="form-elements">
-                            <i class="fas fa-th-large menu-icon"></i>
-                            <span class="menu-title">Vehicles</span>
-
-                        </a>
-                        <div class="collapse" id="form1">
-                            <ul class="nav flex-column sub-menu">
-                                <li class="nav-item"><a class="nav-link" href="{{ route('vehicle.index') }}">Vehicles Registered</a></li>
-
-
-                            </ul>
-                        </div>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link" data-bs-toggle="collapse" href="#form2" aria-expanded="false" aria-controls="form-elements">
-                            <i class="fas fa-th-large menu-icon"></i>
-                            <span class="menu-title">Customers</span>
-
-                        </a>
-                        <div class="collapse" id="form2">
-                            <ul class="nav flex-column sub-menu">
-                                <li class="nav-item"><a class="nav-link" href="{{ route('user.index') }}">Customers Registerd</a></li>
-
-
-                            </ul>
-                        </div>
-                    </li>
-
 
                 </ul>
             </nav>
-            <div class="container">
-                <h1 class="my-4">Branches</h1>
-                <a href="{{ route('branches.create') }}" class="btn btn-primary mb-3">Add New Branch</a>
+            <!-- partial -->
+            <div class="container mt-5">
+        <h1 class="mb-4">Users</h1>
 
-                @if (session('success'))
-                    <div class="alert alert-success">
-                        {{ session('success') }}
-                    </div>
-                @endif
-
-                <table class="table table-striped">
-                    <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Name</th>
-                        <th>Address</th>
-                        <th>Telephone</th>
-                        <th>Actions</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    @foreach ($branches as $branch)
-                        <tr>
-                            <td>{{ $branch->BranchID }}</td>
-                            <td>{{ $branch->name }}</td>
-                            <td>{{ $branch->address }}</td>
-                            <td>{{ $branch->telephone }}</td>
-                            <td>
-                                <a href="{{ route('branches.show', $branch->BranchID) }}" class="btn btn-info btn-sm">View</a>
-                                <a href="{{ route('branches.edit', $branch->BranchID) }}" class="btn btn-warning btn-sm">Edit</a>
-                                <form action="{{ route('branches.destroy', $branch->BranchID) }}" method="POST" style="display:inline;">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                                </form>
-                            </td>
-                        </tr>
-                    @endforeach
-                    </tbody>
-                </table>
+        @if (session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
             </div>
+        @endif
 
-
-
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Address</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($users as $user)
+                    <tr>
+                        <td>{{ $user->name }}</td>
+                        <td>{{ $user->email }}</td>
+                        <td>{{ $user->phoneNo }}</td>
+                        <td>{{ $user->address }}</td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
+            <!-- partial -->
         </div>
-        <!-- container-scroller -->
-        <!-- plugins:js -->
-        <script src="/vendors/js/vendor.bundle.base.js"></script>
-        <!-- endinject -->
-        <!-- Plugin js for this page -->
-        <script src="/vendors/chart.js/chart.umd.js"></script>
-        <script src="/vendors/datatables.net/jquery.dataTables.js"></script>
-        <!-- <script src="assets/vendors/datatables.net-bs4/dataTables.bootstrap4.js"></script> -->
-        <script src="/vendors/datatables.net-bs5/dataTables.bootstrap5.js"></script>
-        <script src="/js/dataTables.select.min.js"></script>
-        <!-- End plugin js for this page -->
-        <!-- inject:js -->
-        <script src="/js/off-canvas.js"></script>
-        <script src="/js/template.js"></script>
-        <script src="/js/settings.js"></script>
-        <script src="/js/todolist.js"></script>
-        <!-- endinject -->
-        <!-- Custom js for this page-->
-        <script src="/js/jquery.cookie.js" type="text/javascript"></script>
-        <script src="/js/dashboard.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <!-- main-panel ends -->
+    </div>
+    <!-- page-body-wrapper ends -->
+    </div>
+    <!-- container-scroller -->
+    <!-- plugins:js -->
+    <script src="/vendors/js/vendor.bundle.base.js"></script>
+    <!-- endinject -->
+    <!-- Plugin js for this page -->
+    <script src="/vendors/chart.js/chart.umd.js"></script>
+    <script src="/vendors/datatables.net/jquery.dataTables.js"></script>
+    <!-- <script src="assets/vendors/datatables.net-bs4/dataTables.bootstrap4.js"></script> -->
+    <script src="/vendors/datatables.net-bs5/dataTables.bootstrap5.js"></script>
+    <script src="/js/dataTables.select.min.js"></script>
+    <!-- End plugin js for this page -->
+    <!-- inject:js -->
+    <script src="/js/off-canvas.js"></script>
+    <script src="/js/template.js"></script>
+    <script src="/js/settings.js"></script>
+    <script src="/js/todolist.js"></script>
+    <!-- endinject -->
+    <!-- Custom js for this page-->
+    <script src="/js/jquery.cookie.js" type="text/javascript"></script>
+    <script src="/js/dashboard.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-        <!-- <script src="assets/js/Chart.roundedBarCharts.js"></script> -->
-        <!-- End custom js for this page-->
+    <!-- <script src="assets/js/Chart.roundedBarCharts.js"></script> -->
+    <!-- End custom js for this page-->
 
 @endsection

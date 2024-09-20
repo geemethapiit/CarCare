@@ -12,11 +12,17 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('vehicles', function (Blueprint $table) {
-            $table->string('vehicle_number')->primary(); // Set `vehicle_number` as the primary key
+            $table->string('vehicle_number')->primary(); 
+            $table->string('vehicle_image')->nullable(); 
             $table->string('model');
             $table->year('year');
-            $table->string('user');
+            $table->unsignedBigInteger('user_id')->nullable(); 
+            $table->string('vehicle_book_image')->nullable(); 
+            $table->string('status')->default('pending');
             $table->timestamps();
+
+            // Set up foreign key constraint
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

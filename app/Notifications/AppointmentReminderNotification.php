@@ -4,14 +4,15 @@ namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use Illuminate\Notifications\Messages\BroadcastMessage;
+use Illuminate\Notifications\Messages\DatabaseMessage;
 
 class AppointmentReminderNotification extends Notification
 {
     use Queueable;
 
-    protected $appointment;
+    private $appointment;
 
     public function __construct($appointment)
     {
@@ -20,15 +21,23 @@ class AppointmentReminderNotification extends Notification
 
     public function via($notifiable)
     {
-        // Use database or custom push notification channel
-        return ['database']; // or specify a custom push notification channel
+        // Send via database and broadcast (you can add more channels if needed)
+        return ['database', 'broadcast'];
     }
 
-    public function toArray($notifiable)
+    public function toDatabase($notifiable)
     {
         return [
-            'message' => 'Reminder: You have an appointment scheduled on ' . $this->appointment->date . ' at ' . $this->appointment->time,
             'appointment_id' => $this->appointment->AppointmentID,
+            'message' => 'Your appointment for service ' . $this->appointment->serviceType->name . ' is coming up on ' . $this->appointment->date . ' at ' . $this->appointment->time,
         ];
+    }
+
+    public function toBroadcast($notifiable)
+    {
+        return new BroadcastMessage([
+            'appointment_id' => $this->appointment->AppointmentID,
+            'message' => 'Your appointment for service ' . $this->appointment->serviceType->name . ' is coming up on ' . $this->appointment->date . ' at ' . $this->appointment->time,
+        ]);
     }
 }

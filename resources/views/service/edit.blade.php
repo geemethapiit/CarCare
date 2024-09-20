@@ -223,94 +223,110 @@
                     <div class="container-fluid page-body-wrapper">
                         <!-- partial:partials/_sidebar.html -->
                         <nav class="sidebar sidebar-offcanvas" id="sidebar">
-                            <ul class="nav">
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{route('admin')}}">
-                                        <i class="fas fa-th-large menu-icon"></i>
-                                        <span class="menu-title">Dashboard</span>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" data-bs-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
-                                        <i class="fas fa-th-large menu-icon"></i>
-                                        <span class="menu-title">Bookings</span>
+                <ul class="nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{route('admin')}}">
+                            <i class="fas fa-th-large menu-icon"></i>
+                            <span class="menu-title">Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
+                            <i class="fas fa-th-large menu-icon"></i>
+                            <span class="menu-title">Bookings</span>
 
 
-                                    </a>
-                                    <div class="collapse" id="ui-basic">
-                                        <ul class="nav flex-column sub-menu">
-                                            <li class="nav-item"> <a class="nav-link" href="pages/ui-features/buttons.html">Buttons</a></li>
-                                            <li class="nav-item"> <a class="nav-link" href="pages/ui-features/dropdowns.html">Dropdowns</a></li>
-                                            <li class="nav-item"> <a class="nav-link" href="pages/ui-features/typography.html">Typography</a></li>
-                                        </ul>
-                                    </div>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" data-bs-toggle="collapse" href="#form-elements" aria-expanded="false" aria-controls="form-elements">
-                                        <i class="fas fa-th-large menu-icon"></i>
-                                        <span class="menu-title">Branches</span>
+                        </a>
+                        <div class="collapse" id="ui-basic">
+                            <ul class="nav flex-column sub-menu">
+                                <li class="nav-item"> <a class="nav-link" href="pages/ui-features/buttons.html">Buttons</a></li>
+                                <li class="nav-item"> <a class="nav-link" href="pages/ui-features/dropdowns.html">Dropdowns</a></li>
+                                <li class="nav-item"> <a class="nav-link" href="pages/ui-features/typography.html">Typography</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="collapse" href="#form-elements" aria-expanded="false" aria-controls="form-elements">
+                            <i class="fas fa-th-large menu-icon"></i>
+                            <span class="menu-title">Branches</span>
 
 
-                                    </a>
-                                    <div class="collapse" id="form-elements">
-                                        <ul class="nav flex-column sub-menu">
-                                            <li class="nav-item"><a class="nav-link" href="{{ route('branches.index') }}">View Branches</a></li>
-                                            <li class="nav-item"><a class="nav-link" href="{{ route('branches.create') }}">New Branches</a></li>
+                        </a>
+                        <div class="collapse" id="form-elements">
+                            <ul class="nav flex-column sub-menu">
+                                <li class="nav-item"><a class="nav-link" href="{{ route('branches.index') }}">View Branches</a></li>
+                                <li class="nav-item"><a class="nav-link" href="{{ route('branches.create') }}">New Branches</a></li>
 
-                                        </ul>
-                                    </div>
-                                </li>
+                            </ul>
+                        </div>
+                    </li>
 
-                                <li class="nav-item">
-                                    <a class="nav-link" data-bs-toggle="collapse" href="#form-elements1" aria-expanded="false" aria-controls="form-elements">
-                                        <i class="fas fa-th-large menu-icon"></i>
-                                        <span class="menu-title">Services</span>
-
-
-                                    </a>
-                                    <div class="collapse" id="form-elements1">
-                                        <ul class="nav flex-column sub-menu">
-                                            <li class="nav-item"><a class="nav-link" href="{{ route('service.index') }}">View Services</a></li>
-                                            <li class="nav-item"><a class="nav-link" href="{{ route('service.create') }}">New Service</a></li>
-
-                                        </ul>
-                                    </div>
-                                </li>
-
-                                <li class="nav-item">
-                                    <a class="nav-link" data-bs-toggle="collapse" href="#form-elements2" aria-expanded="false" aria-controls="form-elements">
-                                        <i class="fas fa-th-large menu-icon"></i>
-                                        <span class="menu-title">Sub-Services</span>
+                    <li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="collapse" href="#form-elements1" aria-expanded="false" aria-controls="form-elements">
+                            <i class="fas fa-th-large menu-icon"></i>
+                            <span class="menu-title">Services</span>
 
 
-                                    </a>
-                                    <div class="collapse" id="form-elements2">
-                                        <ul class="nav flex-column sub-menu">
-                                            <li class="nav-item"><a class="nav-link" href="{{ route('branches.index') }}">View Branches</a></li>
-                                            <li class="nav-item"><a class="nav-link" href="{{ route('branches.create') }}">New Branches</a></li>
+                        </a>
+                        <div class="collapse" id="form-elements1">
+                            <ul class="nav flex-column sub-menu">
+                                <li class="nav-item"><a class="nav-link" href="{{ route('service.index') }}">View Services</a></li>
+                                <li class="nav-item"><a class="nav-link" href="{{ route('service.create') }}">New Service</a></li>
 
-                                        </ul>
-                                    </div>
-                                </li>
+                            </ul>
+                        </div>
+                    </li>
 
-                                <li class="nav-item">
-                                    <a class="nav-link" data-bs-toggle="collapse" href="#form" aria-expanded="false" aria-controls="form-elements">
-                                        <i class="fas fa-th-large menu-icon"></i>
-                                        <span class="menu-title">Service Record</span>
+                   
 
-                                    </a>
-                                    <div class="collapse" id="form">
-                                        <ul class="nav flex-column sub-menu">
-                                            <li class="nav-item"><a class="nav-link" href="{{ route('service_records.create') }}">Service Details</a></li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="collapse" href="#form" aria-expanded="false" aria-controls="form-elements">
+                            <i class="fas fa-th-large menu-icon"></i>
+                            <span class="menu-title">Service Record</span>
 
-
-                                        </ul>
-                                    </div>
-                                </li>
+                        </a>
+                        <div class="collapse" id="form">
+                            <ul class="nav flex-column sub-menu">
+                                <li class="nav-item"><a class="nav-link" href="{{ route('service_records.create') }}">Service Details</a></li>
 
 
                             </ul>
-                        </nav>
+                        </div>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="collapse" href="#form1" aria-expanded="false" aria-controls="form-elements">
+                            <i class="fas fa-th-large menu-icon"></i>
+                            <span class="menu-title">Vehicles</span>
+
+                        </a>
+                        <div class="collapse" id="form1">
+                            <ul class="nav flex-column sub-menu">
+                                <li class="nav-item"><a class="nav-link" href="{{ route('vehicle.index') }}">Vehicles Registered</a></li>
+
+
+                            </ul>
+                        </div>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="collapse" href="#form2" aria-expanded="false" aria-controls="form-elements">
+                            <i class="fas fa-th-large menu-icon"></i>
+                            <span class="menu-title">Customers</span>
+
+                        </a>
+                        <div class="collapse" id="form2">
+                            <ul class="nav flex-column sub-menu">
+                                <li class="nav-item"><a class="nav-link" href="{{ route('user.index') }}">Customers Registerd</a></li>
+
+
+                            </ul>
+                        </div>
+                    </li>
+
+
+                </ul>
+            </nav>
                         <!-- partial -->
                         <div class="container">
                             <h1 class="my-4">Edit Service</h1>

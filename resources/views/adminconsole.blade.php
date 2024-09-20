@@ -157,6 +157,36 @@
                         </div>
                     </li>
 
+                    <li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="collapse" href="#form1" aria-expanded="false" aria-controls="form-elements">
+                            <i class="fas fa-th-large menu-icon"></i>
+                            <span class="menu-title">Vehicles</span>
+
+                        </a>
+                        <div class="collapse" id="form1">
+                            <ul class="nav flex-column sub-menu">
+                                <li class="nav-item"><a class="nav-link" href="{{ route('vehicles.index') }}">Vehicles Registered</a></li>
+
+
+                            </ul>
+                        </div>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="collapse" href="#form2" aria-expanded="false" aria-controls="form-elements">
+                            <i class="fas fa-th-large menu-icon"></i>
+                            <span class="menu-title">Customers</span>
+
+                        </a>
+                        <div class="collapse" id="form2">
+                            <ul class="nav flex-column sub-menu">
+                                <li class="nav-item"><a class="nav-link" href="{{ route('user.index') }}">Customers Registerd</a></li>
+
+
+                            </ul>
+                        </div>
+                    </li>
+
 
                 </ul>
             </nav>

@@ -9,6 +9,9 @@ use App\Http\Controllers\ServiceRecordController;
 use App\Http\Controllers\ProductdsController;
 use App\Http\Controllers\SubServiceController;
 use App\Http\Controllers\AppointmentSettingController;
+use App\Http\Controllers\VehicleController;
+use App\Http\Controllers\UserController;
+
 
 use Illuminate\Support\Facades\Route;
 
@@ -97,3 +100,12 @@ Route::delete('sub-services/{id}', [SubServiceController::class, 'destroy'])->na
 
 Route::get('settings', [AppointmentSettingController::class, 'index'])->name('settings.index');
 Route::post('settings/update', [AppointmentSettingController::class, 'update'])->name('settings.update');
+
+
+
+
+Route::get('/vehicles', [VehicleController::class, 'index'])->name('vehicles.index');
+
+Route::patch('/vehicles/{id}/approve', [VehicleController::class, 'approve'])->name('vehicles.approve');
+
+Route::get('/users', [UserController::class, 'index'])->name('user.index');

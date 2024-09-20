@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\AdminUser;
+use App\Models\Vehicle;
 use Illuminate\Http\Request;
 use App\Models\ServiceRecord; // Ensure you have a ServiceRecord model
 
@@ -12,6 +13,7 @@ class ServiceRecordController extends Controller
     public function create()
     {
         $adminUsers = AdminUser::all(); // Fetch all admin users
+        $vehicles = Vehicle::all();
         return view('service_records_create', compact('adminUsers')); // Pass the list to your view
     }
 

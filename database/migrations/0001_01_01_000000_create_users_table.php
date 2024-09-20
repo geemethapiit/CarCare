@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('address')->nullable(); // Make address optional
             $table->string('phoneNo')->nullable(); // Make phoneNo optional
             $table->string('password');
+            $table->string('profile_pic')->nullable(); // Make profile_pic optional
             $table->rememberToken();
             $table->timestamps();
         });

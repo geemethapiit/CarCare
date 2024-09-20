@@ -2,39 +2,46 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
 use App\Models\Appointment;
 use App\Notifications\AppointmentReminderNotification;
 use Carbon\Carbon;
+use Illuminate\Console\Command;
 
 class SendAppointmentReminders extends Command
 {
-    protected $signature = 'reminders:send';
-    protected $description = 'Send reminders for upcoming appointments';
+    protected $signature = 'reminders:appointments';
 
-    public function __construct()
-    {
-        parent::__construct();
-    }
+    protected $description = 'Send reminders for upcoming appointments a day before and 5 hours before the appointment.';
 
     public function handle()
     {
-        // Define the time range for sending reminders (e.g., 2 hours before the appointment)
-        $reminderTime = Carbon::now()->addHours(2);
+        // Get the current time
+        $now = Carbon::now();
 
-        // Find appointments that are within the reminder time and haven't been reminded yet
-        $appointments = Appointment::where('date', $reminderTime->toDateString())
-            ->where('time', $reminderTime->toTimeString())
-            ->where('status', '!=', 'reminded') // Ensure to add a `status` column to track reminded status
+        // Find appointments happening a day from now
+        $dayBefore = $now->copy()->addDay();
+        $appointmentsDayBefore = Appointment::whereDate('date', $dayBefore->toDateString())
+            ->where('time', '>=', $now->format('H:i:s'))
             ->get();
 
-        foreach ($appointments as $appointment) {
-            $appointment->user->notify(new AppointmentReminderNotification($appointment));
-            // Update appointment status to reminded
-            $appointment->status = 'reminded';
-            $appointment->save();
+        // Find appointments happening 5 hours from now
+        $fiveHoursBefore = $now->copy()->addHours(5);
+        $appointmentsFiveHoursBefore = Appointment::whereDate('date', $fiveHoursBefore->toDateString())
+            ->whereTime('time', $fiveHoursBefore->format('H:i:s'))
+            ->get();
+
+        // Send notifications for appointments a day before
+        foreach ($appointmentsDayBefore as $appointment) {
+            $user = $appointment->user; // assuming 'user()' relationship is defined
+            $user->notify(new AppointmentReminderNotification($appointment));
         }
 
-        $this->info('Reminders sent successfully.');
+        // Send notifications for appointments 5 hours before
+        foreach ($appointmentsFiveHoursBefore as $appointment) {
+            $user = $appointment->user;
+            $user->notify(new AppointmentReminderNotification($appointment));
+        }
+
+        $this->info('Appointment reminders sent successfully!');
     }
 }

@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\AppointmentController;
 use App\Http\Controllers\Api\ServiceRecordController;
 use App\Http\Controllers\Api\FeedbackController;
 use App\Http\Controllers\AppointmentReminderController;
+use App\Http\Controllers\Api\ProfileController;
 
 
 /*
@@ -51,6 +52,8 @@ Route::middleware('auth:sanctum')->post('/appointments', [AppointmentController:
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('appointments/upcoming', [AppointmentController::class, 'getUpcomingAppointments']);
     Route::get('appointments/history', [AppointmentController::class, 'getAppointmentHistory']);
+    Route::get('profile/details', [ProfileController::class, 'index']);
+    Route::post('profile/update', [ProfileController::class, 'update']);
 });
 
 //available time slot
@@ -86,5 +89,20 @@ Route::middleware('auth:sanctum')->post('/feedback', [FeedbackController::class,
 
 // routes/api.php
 Route::post('/send-reminder', [AppointmentReminderController::class, 'sendReminder']);
+
+// send profile details
+Route::middleware('auth:sanctum')->get('/user', [UserController::class, 'getUser']);
+
+//change password
+Route::middleware('auth:sanctum')->post('/changepassword', [UserController::class, 'changePassword']);
+
+//delete user account
+Route::middleware('auth:sanctum')->delete('/deleteuser', [UserController::class, 'deleteUser']);
+
+
+// appointment reminder
+Route::middleware('auth:api')->get('/notifications', function () {
+    return auth()->user()->notifications;
+});
 
 

@@ -12,10 +12,9 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // Schedule the command to run daily
-        $schedule->command('reminders:send')->dailyAt('08:00'); // Run every day at 8:00 AM
+        $schedule->command('reminders:appointments')->hourly();
     }
-
+    
 
     /**
      * Register the commands for the application.

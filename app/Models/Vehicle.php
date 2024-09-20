@@ -7,21 +7,24 @@ use Illuminate\Database\Eloquent\Model;
 class Vehicle extends Model
 {
     protected $table = 'vehicles';
-    protected $primaryKey = 'vehicle_number'; // Set vehicle_number as the primary key
-    public $incrementing = false; // Since vehicle_number is a string, disable auto-incrementing
-    protected $keyType = 'string'; // Specify the key type as string
-
+    protected $primaryKey = 'vehicle_number'; 
+    public $incrementing = false; 
+    protected $keyType = 'string'; 
+    
     protected $fillable = [
         'vehicle_number',
+        'vehicle_image',
         'model',
         'year',
-        'user',
+        'user_id',
+        'vehicle_book_image', 
+        'status', 
     ];
 
     public function user()
     {
 
-    return $this->belongsTo(User::class, 'user'); 
+    return $this->belongsTo(User::class, 'user_id'); 
 
     }
 }

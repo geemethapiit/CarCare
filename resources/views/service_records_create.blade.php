@@ -140,21 +140,7 @@
                         </div>
                     </li>
 
-                    <li class="nav-item">
-                        <a class="nav-link" data-bs-toggle="collapse" href="#form-elements2" aria-expanded="false" aria-controls="form-elements">
-                            <i class="fas fa-th-large menu-icon"></i>
-                            <span class="menu-title">Sub-Services</span>
-
-
-                        </a>
-                        <div class="collapse" id="form-elements2">
-                            <ul class="nav flex-column sub-menu">
-                                <li class="nav-item"><a class="nav-link" href="{{ route('branches.index') }}">View Branches</a></li>
-                                <li class="nav-item"><a class="nav-link" href="{{ route('branches.create') }}">New Branches</a></li>
-
-                            </ul>
-                        </div>
-                    </li>
+                   
 
                     <li class="nav-item">
                         <a class="nav-link" data-bs-toggle="collapse" href="#form" aria-expanded="false" aria-controls="form-elements">
@@ -171,90 +157,39 @@
                         </div>
                     </li>
 
+                    <li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="collapse" href="#form1" aria-expanded="false" aria-controls="form-elements">
+                            <i class="fas fa-th-large menu-icon"></i>
+                            <span class="menu-title">Vehicles</span>
+
+                        </a>
+                        <div class="collapse" id="form1">
+                            <ul class="nav flex-column sub-menu">
+                                <li class="nav-item"><a class="nav-link" href="{{ route('vehicle.index') }}">Vehicles Registered</a></li>
+
+
+                            </ul>
+                        </div>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="collapse" href="#form2" aria-expanded="false" aria-controls="form-elements">
+                            <i class="fas fa-th-large menu-icon"></i>
+                            <span class="menu-title">Customers</span>
+
+                        </a>
+                        <div class="collapse" id="form2">
+                            <ul class="nav flex-column sub-menu">
+                                <li class="nav-item"><a class="nav-link" href="{{ route('user.index') }}">Customers Registerd</a></li>
+
+
+                            </ul>
+                        </div>
+                    </li>
+
 
                 </ul>
             </nav>
-            <!-- partial -->
-            <div class="container-scroller">
-
-                <!-- partial:partials/_navbar.html -->
-                <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
-                    <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-start">
-                        <a class="navbar-brand brand-logo me-5" href="index.html"><img src="/Images/WhatsApp_Image_2024-08-17_at_11.34.32_490555d1-removebg-preview.png" class="me-2" alt="logo" /></a>
-                        <a class="navbar-brand brand-logo-mini" href="index.html"><img src="/Images/WhatsApp_Image_2024-08-17_at_11.34.32_490555d1-removebg-preview.png" alt="logo" /></a>
-                    </div>
-                    <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
-                        <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
-                            <span class="icon-menu"></span>
-                        </button>
-                        <ul class="navbar-nav mr-lg-2">
-                            <li class="nav-item nav-search d-none d-lg-block">
-                                <div class="input-group">
-                                    <div class="input-group-prepend hover-cursor" id="navbar-search-icon">
-            <span class="input-group-text" id="search">
-              <i class="fas fa-search"></i>
-            </span>
-                                    </div>
-                                    <input type="text" class="form-control" id="navbar-search-input" placeholder="Search now" aria-label="search" aria-describedby="search">
-                                </div>
-                            </li>
-                        </ul>
-                        <ul class="navbar-nav navbar-nav-right">
-                            <li class="nav-item dropdown">
-                                <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#" data-bs-toggle="dropdown">
-                                    <i class="fas fa-bell mx-0"></i>
-                                    <span class="count"></span>
-                                </a>
-                                <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="notificationDropdown">
-                                    <p class="mb-0 font-weight-normal float-left dropdown-header">Notifications</p>
-                                    <a class="dropdown-item preview-item">
-                                        <div class="preview-thumbnail">
-                                            <div class="preview-icon bg-success">
-                                                <i class="fas fa-info-circle mx-0"></i>
-                                            </div>
-                                        </div>
-                                        <div class="preview-item-content">
-                                            <h6 class="preview-subject font-weight-normal">Application Error</h6>
-                                            <p class="font-weight-light small-text mb-0 text-muted"> Just now </p>
-                                        </div>
-                                    </a>
-
-                                    <a class="dropdown-item preview-item" href="{{ route('admin.register') }}">
-                                        <div class="preview-thumbnail">
-                                            <div class="preview-icon bg-info">
-                                                <i class="fas fa-user mx-0"></i>
-                                            </div>
-                                        </div>
-                                        <div class="preview-item-content">
-                                            <h6 class="preview-subject font-weight-normal">New user registration</h6>
-                                        </div>
-                                    </a>
-                                </div>
-                            </li>
-                            <li class="nav-item nav-profile dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" id="profileDropdown">
-                                    <img src="/images/face28.jpg" alt="profile" />
-                                </a>
-                                <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST">
-                                        @csrf
-                                        <button type="submit" class="dropdown-item">
-                                            <i class="fas fa-power-off text-primary"></i> Logout
-                                        </button>
-                                    </form>
-                                </div>
-                            </li>
-                            <li class="nav-item nav-settings d-none d-lg-flex">
-                                <a class="nav-link" href="#">
-                                    <i class="fas fa-ellipsis-h"></i>
-                                </a>
-                            </li>
-                        </ul>
-                        <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
-                            <span class="icon-menu"></span>
-                        </button>
-                    </div>
-                </nav>
                 <!-- partial -->
                 <div class="container-scroller">
                     <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
